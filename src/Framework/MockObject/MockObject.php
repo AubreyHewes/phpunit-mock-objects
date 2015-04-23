@@ -43,6 +43,20 @@ interface PHPUnit_Framework_MockObject_MockObject /*extends PHPUnit_Framework_Mo
     public function __phpunit_getInvocationMocker();
 
     /**
+     * Registers a new static expectation in the mock object and returns the
+     * match object which can be infused with further details.
+     *
+     * @param  PHPUnit_Framework_MockObject_Matcher_Invocation $matcher
+     * @return PHPUnit_Framework_MockObject_Builder_InvocationMocker
+     */
+    public static function staticExpects(PHPUnit_Framework_MockObject_Matcher_Invocation $matcher);
+
+    /**
+     * @return PHPUnit_Framework_MockObject_InvocationMocker
+     */
+    public static function __phpunit_getStaticInvocationMocker();
+
+    /**
      * Verifies that the current expectation is valid. If everything is OK the
      * code should just return, if not it must throw an exception.
      *

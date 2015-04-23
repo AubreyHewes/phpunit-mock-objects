@@ -1,5 +1,6 @@
 {prologue}{class_declaration}
 {
+    private static $__phpunit_staticInvocationMocker;
     private $__phpunit_invocationMocker;
     private $__phpunit_originalObject;
 
@@ -7,6 +8,11 @@
     public function expects(PHPUnit_Framework_MockObject_Matcher_Invocation $matcher)
     {
         return $this->__phpunit_getInvocationMocker()->expects($matcher);
+    }
+
+    public static function staticExpects(PHPUnit_Framework_MockObject_Matcher_Invocation $matcher)
+    {
+        return self::__phpunit_getStaticInvocationMocker()->expects($matcher);
     }
 {method}
     public function __phpunit_setOriginalObject($originalObject)
@@ -23,14 +29,26 @@
         return $this->__phpunit_invocationMocker;
     }
 
+    public static function __phpunit_getStaticInvocationMocker()
+    {
+        if (self::$__phpunit_staticInvocationMocker === NULL) {
+            self::$__phpunit_staticInvocationMocker = new PHPUnit_Framework_MockObject_InvocationMocker;
+        }
+
+        return self::$__phpunit_staticInvocationMocker;
+    }
+
     public function __phpunit_hasMatchers()
     {
-        return $this->__phpunit_getInvocationMocker()->hasMatchers();
+        return self::__phpunit_getStaticInvocationMocker()->hasMatchers() ||
+               $this->__phpunit_getInvocationMocker()->hasMatchers();
     }
 
     public function __phpunit_verify()
     {
+        self::__phpunit_getStaticInvocationMocker()->verify();
         $this->__phpunit_getInvocationMocker()->verify();
+        self::$__phpunit_staticInvocationMocker = NULL;
         $this->__phpunit_invocationMocker = NULL;
     }
 }{epilogue}

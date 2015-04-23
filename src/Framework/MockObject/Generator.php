@@ -106,6 +106,7 @@ class PHPUnit_Framework_MockObject_Generator
       'require' => TRUE,
       'require_once' => TRUE,
       'return' => TRUE,
+      'staticExpects' => TRUE,
       'static' => TRUE,
       'switch' => TRUE,
       'throw' => TRUE,

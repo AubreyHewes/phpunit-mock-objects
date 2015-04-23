@@ -380,6 +380,72 @@ class Framework_MockObjectTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals(get_class($mock1), get_class($mock2));
     }
 
+    public function testStubbedReturnValueForStaticMethod()
+    {
+        $this->getMockClass(
+          'StaticMockTestClass',
+          array('doSomething'),
+          array(),
+          'StaticMockTestClassMock'
+        );
+
+        StaticMockTestClassMock::staticExpects($this->any())
+          ->method('doSomething')
+          ->will($this->returnValue('something'));
+
+        $this->assertEquals(
+          'something', StaticMockTestClassMock::doSomething()
+        );
+
+        $this->getMockClass(
+          'StaticMockTestClass',
+          array('doSomething'),
+          array(),
+          'StaticMockTestClassMock'
+        );
+
+        StaticMockTestClassMock::staticExpects($this->any())
+          ->method('doSomething')
+          ->willReturn('something');
+
+        $this->assertEquals(
+          'something', StaticMockTestClassMock::doSomething()
+        );
+    }
+
+    public function testStubbedReturnValueForStaticMethod2()
+    {
+        $this->getMockClass(
+          'StaticMockTestClass',
+          array('doSomething'),
+          array(),
+          'StaticMockTestClassMock2'
+        );
+
+        StaticMockTestClassMock2::staticExpects($this->any())
+          ->method('doSomething')
+          ->will($this->returnValue('something'));
+
+        $this->assertEquals(
+          'something', StaticMockTestClassMock2::doSomethingElse()
+        );
+
+        $this->getMockClass(
+          'StaticMockTestClass',
+          array('doSomething'),
+          array(),
+          'StaticMockTestClassMock2'
+        );
+
+        StaticMockTestClassMock2::staticExpects($this->any())
+          ->method('doSomething')
+          ->willReturn('something');
+
+        $this->assertEquals(
+          'something', StaticMockTestClassMock2::doSomethingElse()
+        );
+    }
+
     public function testGetMockForAbstractClass()
     {
         $mock = $this->getMock('AbstractMockTestClass');
@@ -814,15 +880,6 @@ class Framework_MockObjectTest extends PHPUnit_Framework_TestCase
             'InterfaceWithStaticMethod',
             $this->getMock('InterfaceWithStaticMethod')
         );
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_MockObject_BadMethodCallException
-     */
-    public function testInvokingStubbedStaticMethodRaisesException()
-    {
-        $mock = $this->getMock('ClassWithStaticMethod');
-        $mock->staticMethod();
     }
 
     /**
